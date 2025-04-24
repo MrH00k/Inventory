@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoryX | Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #fafafa;
+        }
+        
+        .card-hover {
+            transition: all 0.2s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-available {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: rgb(16, 185, 129);
+        }
+        
+        .status-assigned {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: rgb(59, 130, 246);
+        }
+        
+        .status-maintenance {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: rgb(245, 158, 11);
+        }
+        
+        .status-retired {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: rgb(239, 68, 68);
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Estilos para el menú móvil */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 16rem;
+            z-index: 50;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        
+        .overlay.open {
+            display: block;
+        }
+        
+        /* Barra de búsqueda móvil mejorada */
+        .mobile-search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 60;
+            background-color: white;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .mobile-search-container.open {
+            transform: translateY(0);
+        }
+        
+        .mobile-search-input {
+            flex-grow: 1;
+            padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+            border: 1px solid #e5e5e5;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background-color: #f5f5f5;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' viewBox='0 0 20 20' fill='%23a3a3a3'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 0.75rem center;
+            background-size: 1rem;
+        }
+        
+        .mobile-search-input:focus {
+            outline: none;
+            border-color: #737373;
+            background-color: white;
+        }
+        
+        /* Barra de navegación superior fija */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background-color: white;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        /* Ajustes para el icono de búsqueda en móvil */
+        .mobile-search-btn {
+            margin-left: auto;
+            padding-right: 1rem;
+        }
+        
+        .mobile-search-btn button {
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+        
+        .mobile-search-btn button:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Ajustes para tablas en móvil */
+        @media (max-width: 768px) {
+            .responsive-table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .responsive-table table {
+                min-width: 600px;
+            }
+            
+            /* Barra de búsqueda desktop oculta en móvil */
+            .desktop-search {
+                display: none;
+            }
+            
+            /* Ajuste de padding para el contenido principal */
+            .main-content {
+                padding-top: 1rem;
+            }
+        }
+        
+        /* Barra de búsqueda desktop */
+        @media (min-width: 768px) {
+            /* Barra de búsqueda móvil oculta en desktop */
+            .mobile-search-btn {
+                display: none;
+            }
+            
+            .desktop-search {
+                display: block;
+                width: 100%;
+                max-width: 24rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-primary-900">
+    <!-- Overlay para el menú móvil -->
+    <div id="overlay" class="overlay"></div>
+    
+    <!-- Barra de búsqueda móvil mejorada -->
+    <div id="mobile-search-container" class="mobile-search-container">
+        <button id="close-search" class="mr-3 text-primary-500 hover:text-primary-700">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <input id="mobile-search-input" type="search" class="mobile-search-input" placeholder="Buscar equipos, dispositivos..." autocomplete="off">
+        <button id="search-clear" class="ml-2 text-primary-400 hover:text-primary-600 hidden">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="flex h-screen overflow-hidden">
+        <!-- Barra lateral para desktop -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-primary-900 text-white">
+                <div class="flex items-center h-16 px-6 border-b border-primary-800">
+                    <div class="flex items-center">
+                        <i class="fas fa-cube text-xl mr-3 text-primary-100"></i>
+                        <span class="text-xl font-semibold tracking-tight">InventoryX</span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-6 overflow-y-auto">
+                    <nav class="space-y-1">
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-primary-800 text-white">
+                            <i class="fas fa-chart-line mr-3 text-primary-200"></i>
+                            Panel
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                            <i class="fas fa-laptop mr-3"></i>
+                            Equipos
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                            <i class="fas fa-mobile-alt mr-3"></i>
+                            Dispositivos
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                            <i class="fas fa-users mr-3"></i>
+                            Empleados
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                            <i class="fas fa-file-invoice mr-3"></i>
+                            Reportes
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                            <i class="fas fa-cog mr-3"></i>
+                            Configuración
+                        </a>
+                    </nav>
+                    
+                    <div class="mt-auto px-4 pt-6">
+                        <div class="p-4 bg-primary-800 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-white">Juan Pérez</p>
+                                    <p class="text-xs font-medium text-primary-200">Administrador</p>
+                                </div>
+                                <button class="ml-auto text-primary-200 hover:text-white">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra lateral para móvil -->
+        <div id="mobile-menu" class="mobile-menu bg-primary-900 text-white">
+            <div class="flex items-center h-16 px-6 border-b border-primary-800">
+                <div class="flex items-center">
+                    <i class="fas fa-cube text-xl mr-3 text-primary-100"></i>
+                    <span class="text-xl font-semibold tracking-tight">InventoryX</span>
+                </div>
+                <button id="close-menu" class="ml-auto text-primary-200 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex flex-col flex-grow px-4 py-6 overflow-y-auto">
+                <nav class="space-y-1">
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-primary-800 text-white">
+                        <i class="fas fa-chart-line mr-3 text-primary-200"></i>
+                        Panel
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                        <i class="fas fa-laptop mr-3"></i>
+                        Equipos
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                        <i class="fas fa-mobile-alt mr-3"></i>
+                        Dispositivos
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                        <i class="fas fa-users mr-3"></i>
+                        Empleados
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                        <i class="fas fa-file-invoice mr-3"></i>
+                        Reportes
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg sidebar-item text-primary-200 hover:text-white">
+                        <i class="fas fa-cog mr-3"></i>
+                        Configuración
+                    </a>
+                </nav>
+                
+                <div class="mt-auto px-4 pt-6">
+                    <div class="p-4 bg-primary-800 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-white">Juan Pérez</p>
+                                <p class="text-xs font-medium text-primary-200">Administrador</p>
+                            </div>
+                            <button class="ml-auto text-primary-200 hover:text-white">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Navegación superior - ahora con posición sticky -->
+            <div class="top-navbar flex items-center justify-between h-16 px-4 sm:px-6">
+                <div class="flex items-center md:hidden">
+                    <button id="open-menu" class="text-primary-500 p-2 rounded-full hover:bg-primary-100">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-1 flex justify-between items-center">
+                    <!-- Barra de búsqueda desktop -->
+                    <div class="desktop-search">
+                        <div class="relative w-full">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-primary-400"></i>
+                            </div>
+                            <input id="desktop-search-input" class="block w-full pl-10 pr-3 py-2 border border-primary-200 rounded-lg bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm" placeholder="Buscar en inventario..." type="search" autocomplete="off">
+                            <button id="desktop-search-clear" class="absolute right-3 top-2 text-primary-400 hover:text-primary-600 hidden">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Botón de búsqueda móvil - mejorado -->
+                    <div class="mobile-search-btn">
+                        <button id="open-search" class="text-primary-500 p-2 rounded-full hover:bg-primary-100">
+                            <i class="fas fa-search text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Área de contenido principal -->
+            <div class="flex-1 overflow-auto p-6 bg-primary-50 main-content">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-primary-900">Panel de Control</h1>
+                    <p class="text-primary-500">Bienvenido de nuevo, Juan. Esto es lo que está pasando con tu inventario hoy.</p>
+                </div>
+                
+                <!-- Tarjetas de estadísticas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-primary-500">Equipos Totales</p>
+                                <p class="mt-1 text-3xl font-semibold text-primary-900">1,248</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
+                                <i class="fas fa-laptop text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex items-center text-sm text-primary-500">
+                                <span class="text-green-500 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 12.5%
+                                </span>
+                                <span class="ml-2">vs mes pasado</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-primary-500">Dispositivos Móviles</p>
+                                <p class="mt-1 text-3xl font-semibold text-primary-900">487</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
+                                <i class="fas fa-mobile-alt text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex items-center text-sm text-primary-500">
+                                <span class="text-green-500 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 8.3%
+                                </span>
+                                <span class="ml-2">vs mes pasado</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-primary-500">En Mantenimiento</p>
+                                <p class="mt-1 text-3xl font-semibold text-primary-900">32</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
+                                <i class="fas fa-tools text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex items-center text-sm text-primary-500">
+                                <span class="text-red-500 flex items-center">
+                                    <i class="fas fa-arrow-down mr-1"></i> 4.2%
+                                </span>
+                                <span class="ml-2">vs mes pasado</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-primary-500">Equipos Retirados</p>
+                                <p class="mt-1 text-3xl font-semibold text-primary-900">89</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
+                                <i class="fas fa-trash-alt text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex items-center text-sm text-primary-500">
+                                <span class="text-green-500 flex items-center">
+                                    <i class="fas fa-arrow-up mr-1"></i> 2.1%
+                                </span>
+                                <span class="ml-2">vs mes pasado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actividad reciente y estado del inventario -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Actividad reciente -->
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-semibold text-primary-900">Actividad Reciente</h2>
+                            <button class="text-sm font-medium text-primary-500 hover:text-primary-900">Ver Todo</button>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                        <i class="fas fa-laptop text-primary-600"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-primary-900">Nuevo MacBook Pro asignado</p>
+                                    <p class="text-sm text-primary-500">Asignado a María González (ID: #INV-2023-0142)</p>
+                                    <p class="text-xs text-primary-400 mt-1">Hace 2 horas</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="status-badge status-assigned">Asignado</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                        <i class="fas fa-mobile-alt text-primary-600"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-primary-900">Mantenimiento iPhone 14 Pro</p>
+                                    <p class="text-sm text-primary-500">Cambio de batería solicitado para dispositivo #MD-2023-0087</p>
+                                    <p class="text-xs text-primary-400 mt-1">Hace 5 horas</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="status-badge status-maintenance">Mantenimiento</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                        <i class="fas fa-laptop text-primary-600"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-primary-900">Dell XPS 15 retirado</p>
+                                    <p class="text-sm text-primary-500">Dispositivo #INV-2020-0452 marcado como retirado</p>
+                                    <p class="text-xs text-primary-400 mt-1">Hace 1 día</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="status-badge status-retired">Retirado</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-3">
+                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                        <i class="fas fa-mobile-alt text-primary-600"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-primary-900">Nuevo Samsung Galaxy S23 añadido</p>
+                                    <p class="text-sm text-primary-500">Dispositivo #MD-2023-0098 añadido al inventario</p>
+                                    <p class="text-xs text-primary-400 mt-1">Hace 2 días</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <span class="status-badge status-available">Disponible</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Estado del inventario -->
+                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold text-primary-900">Estado del Inventario</h2>
+                        </div>
+                        
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-primary-700">Disponibles</span>
+                                    <span class="text-sm font-medium text-primary-900">42%</span>
+                                </div>
+                                <div class="w-full bg-primary-100 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-primary-700">Asignados</span>
+                                    <span class="text-sm font-medium text-primary-900">51%</span>
+                                </div>
+                                <div class="w-full bg-primary-100 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 51%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-primary-700">Mantenimiento</span>
+                                    <span class="text-sm font-medium text-primary-900">5%</span>
+                                </div>
+                                <div class="w-full bg-primary-100 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 5%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-primary-700">Retirados</span>
+                                    <span class="text-sm font-medium text-primary-900">2%</span>
+                                </div>
+                                <div class="w-full bg-primary-100 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 2%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <button class="w-full flex items-center justify-center px-4 py-2 border border-primary-200 rounded-lg text-sm font-medium text-primary-700 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                <i class="fas fa-plus mr-2"></i> Añadir Nuevo Dispositivo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Equipos recientes -->
+                <div class="bg-white rounded-xl shadow-sm border border-primary-100 overflow-hidden card-hover">
+                    <div class="px-6 py-4 border-b border-primary-100">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-primary-900">Equipos Recientes</h2>
+                            <button class="text-sm font-medium text-primary-500 hover:text-primary-900">Ver Todo</button>
+                        </div>
+                    </div>
+                    
+                    <div class="responsive-table">
+                        <table class="min-w-full divide-y divide-primary-200">
+                            <thead class="bg-primary-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">ID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Dispositivo</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Modelo</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Asignado a</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Fecha Compra</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Estado</th>
+                                    <th scope="col" class="relative px-6 py-3">
+                                        <span class="sr-only">Acciones</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-primary-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2023-0142</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">MacBook Pro</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">16" M2 Max, 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">María González</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">15 Mar 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="status-badge status-assigned">Asignado</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
+                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2022-0781</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Dell XPS 15</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">i7-11800H, 32GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Carlos Martínez</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">22 Ago 2022</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="status-badge status-assigned">Asignado</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
+                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2023-0095</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Mac Mini</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">M2, 16GB, 512GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">-</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">10 Feb 2023</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="status-badge status-available">Disponible</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
+                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2021-0324</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">HP EliteBook</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">i5-1135G7, 16GB</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">-</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">05 Nov 2021</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="status-badge status-maintenance">Mantenimiento</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
+                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-3 border-t border-primary-100 bg-primary-50">
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-primary-500">
+                                Mostrando <span class="font-medium">1</span> a <span class="font-medium">4</span> de <span class="font-medium">1248</span> resultados
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 border border-primary-200 rounded-md text-sm font-medium text-primary-700 bg-white hover:bg-primary-50">
+                                    Anterior
+                                </button>
+                                <button class="px-3 py-1 border border-primary-200 rounded-md text-sm font-medium text-primary-700 bg-white hover:bg-primary-50">
+                                    Siguiente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efectos hover programáticos
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.05)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+            
+            // Efectos click en items del sidebar
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebarItems.forEach(i => i.classList.remove('bg-primary-800', 'text-white'));
+                    sidebarItems.forEach(i => i.classList.add('text-primary-200', 'hover:text-white'));
+                    this.classList.remove('text-primary-200', 'hover:text-white');
+                    this.classList.add('bg-primary-800', 'text-white');
+                });
+            });
+            
+            // Funcionalidad del menú móvil
+            const mobileMenu = document.getElementById('mobile-menu');
+            const openMenuBtn = document.getElementById('open-menu');
+            const closeMenuBtn = document.getElementById('close-menu');
+            const overlay = document.getElementById('overlay');
+            
+            openMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.add('open');
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            closeMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+            
+            overlay.addEventListener('click', function() {
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+            
+            // Funcionalidad mejorada de la barra de búsqueda
+            const mobileSearchContainer = document.getElementById('mobile-search-container');
+            const openSearchBtn = document.getElementById('open-search');
+            const closeSearchBtn = document.getElementById('close-search');
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            const searchClearBtn = document.getElementById('search-clear');
+            const desktopSearchInput = document.getElementById('desktop-search-input');
+            const desktopSearchClearBtn = document.getElementById('desktop-search-clear');
+            
+            // Abrir barra de búsqueda móvil
+            openSearchBtn.addEventListener('click', function() {
+                mobileSearchContainer.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => mobileSearchInput.focus(), 300);
+            });
+            
+            // Cerrar barra de búsqueda móvil
+            closeSearchBtn.addEventListener('click', function() {
+                mobileSearchContainer.classList.remove('open');
+                document.body.style.overflow = '';
+                mobileSearchInput.value = '';
+                searchClearBtn.classList.add('hidden');
+            });
+            
+            // Mostrar/ocultar botón de limpiar en móvil
+            mobileSearchInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    searchClearBtn.classList.remove('hidden');
+                } else {
+                    searchClearBtn.classList.add('hidden');
+                }
+            });
+            
+            // Limpiar búsqueda móvil
+            searchClearBtn.addEventListener('click', function() {
+                mobileSearchInput.value = '';
+                mobileSearchInput.focus();
+                this.classList.add('hidden');
+            });
+            
+            // Mostrar/ocultar botón de limpiar en desktop
+            desktopSearchInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    desktopSearchClearBtn.classList.remove('hidden');
+                } else {
+                    desktopSearchClearBtn.classList.add('hidden');
+                }
+            });
+            
+            // Limpiar búsqueda desktop
+            desktopSearchClearBtn.addEventListener('click', function() {
+                desktopSearchInput.value = '';
+                desktopSearchInput.focus();
+                this.classList.add('hidden');
+            });
+            
+            // Cerrar búsqueda al presionar Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (mobileSearchContainer.classList.contains('open')) {
+                        mobileSearchContainer.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
+            
+            // Prevenir que el clic en la barra de búsqueda cierre el menú
+            mobileSearchContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>
