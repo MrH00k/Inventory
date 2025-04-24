@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InventoryX | Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -221,6 +221,31 @@
                 display: block;
                 width: 100%;
                 max-width: 24rem;
+            }
+        }
+
+
+        /* Deshabilitar zoom en móviles al hacer focus en inputs */
+        input, textarea, select {
+            font-size: 16px !important;
+        }
+
+        /* Deshabilitar zoom en móviles */
+        @viewport {
+            width: device-width;
+            zoom: 1;
+            max-zoom: 1;
+            min-zoom: 1;
+            user-zoom: fixed;
+        }
+
+        /* Alternativa para navegadores que no soportan @viewport */
+        @media screen and (max-width: 768px) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+            body {
+                touch-action: manipulation;
             }
         }
     </style>
