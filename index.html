@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -38,6 +39,10 @@
             background-color: #fafafa;
         }
         
+        .dark body {
+            background-color: #0a0a0a;
+        }
+        
         .card-hover {
             transition: all 0.2s ease;
         }
@@ -45,6 +50,10 @@
         .card-hover:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         
         .sidebar-item {
@@ -67,9 +76,17 @@
             color: rgb(16, 185, 129);
         }
         
+        .dark .status-available {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
+        
         .status-assigned {
             background-color: rgba(59, 130, 246, 0.1);
             color: rgb(59, 130, 246);
+        }
+        
+        .dark .status-assigned {
+            background-color: rgba(59, 130, 246, 0.2);
         }
         
         .status-maintenance {
@@ -77,9 +94,17 @@
             color: rgb(245, 158, 11);
         }
         
+        .dark .status-maintenance {
+            background-color: rgba(245, 158, 11, 0.2);
+        }
+        
         .status-retired {
             background-color: rgba(239, 68, 68, 0.1);
             color: rgb(239, 68, 68);
+        }
+        
+        .dark .status-retired {
+            background-color: rgba(239, 68, 68, 0.2);
         }
         
         .scrollbar-hide::-webkit-scrollbar {
@@ -138,6 +163,11 @@
             align-items: center;
         }
         
+        .dark .mobile-search-container {
+            background-color: #171717;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
         .mobile-search-container.open {
             transform: translateY(0);
         }
@@ -155,10 +185,21 @@
             background-size: 1rem;
         }
         
+        .dark .mobile-search-input {
+            background-color: #262626;
+            border-color: #404040;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' viewBox='0 0 20 20' fill='%23737373'%3E%3Cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z' clip-rule='evenodd' /%3E%3C/svg%3E");
+        }
+        
         .mobile-search-input:focus {
             outline: none;
             border-color: #737373;
             background-color: white;
+        }
+        
+        .dark .mobile-search-input:focus {
+            background-color: #262626;
+            border-color: #a3a3a3;
         }
         
         /* Barra de navegación superior fija */
@@ -168,6 +209,11 @@
             z-index: 30;
             background-color: white;
             border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .dark .top-navbar {
+            background-color: #171717;
+            border-bottom-color: #262626;
         }
         
         /* Ajustes para el icono de búsqueda en móvil */
@@ -184,6 +230,10 @@
         
         .mobile-search-btn button:hover {
             background-color: #f5f5f5;
+        }
+        
+        .dark .mobile-search-btn button:hover {
+            background-color: #262626;
         }
         
         /* Ajustes para tablas en móvil */
@@ -224,7 +274,6 @@
             }
         }
 
-
         /* Deshabilitar zoom en móviles al hacer focus en inputs */
         input, textarea, select {
             font-size: 16px !important;
@@ -248,19 +297,82 @@
                 touch-action: manipulation;
             }
         }
+        
+        /* Estilos para el botón de cambio de tema */
+        .theme-toggle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-left: 0.5rem;
+        }
+        
+        .theme-toggle:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .dark .theme-toggle:hover {
+            background-color: #262626;
+        }
+        
+        .theme-toggle i {
+            font-size: 1.1rem;
+            color: #525252;
+        }
+        
+        .dark .theme-toggle i {
+            color: #a3a3a3;
+        }
+        
+        /* Ajustes para el contenedor de acciones en la barra superior */
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .top-actions {
+                gap: 0.25rem;
+            }
+        }
+
+        /* Estilos para evitar que los hovers se queden activos en móvil */
+        @media (hover: none) {
+            .card-hover:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            .sidebar-item:hover {
+                background-color: transparent;
+            }
+            
+            .theme-toggle:hover {
+                background-color: transparent;
+            }
+            
+            .mobile-search-btn button:hover {
+                background-color: transparent;
+            }
+        }
     </style>
 </head>
-<body class="text-primary-900">
+<body class="text-primary-900 dark:text-primary-100 bg-white dark:bg-primary-950">
     <!-- Overlay para el menú móvil -->
     <div id="overlay" class="overlay"></div>
     
     <!-- Barra de búsqueda móvil mejorada -->
     <div id="mobile-search-container" class="mobile-search-container">
-        <button id="close-search" class="mr-3 text-primary-500 hover:text-primary-700">
+        <button id="close-search" class="mr-3 text-primary-500 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-200">
             <i class="fas fa-arrow-left text-lg"></i>
         </button>
         <input id="mobile-search-input" type="search" class="mobile-search-input" placeholder="Buscar equipos, dispositivos..." autocomplete="off">
-        <button id="search-clear" class="ml-2 text-primary-400 hover:text-primary-600 hidden">
+        <button id="search-clear" class="ml-2 text-primary-400 hover:text-primary-600 dark:text-primary-500 dark:hover:text-primary-300 hidden">
             <i class="fas fa-times"></i>
         </button>
     </div>
@@ -375,364 +487,373 @@
                             <button class="ml-auto text-primary-200 hover:text-white">
                                 <i class="fas fa-sign-out-alt"></i>
                             </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Contenido principal -->
-        <div class="flex flex-col flex-1 overflow-hidden">
-            <!-- Navegación superior - ahora con posición sticky -->
-            <div class="top-navbar flex items-center justify-between h-16 px-4 sm:px-6">
-                <div class="flex items-center md:hidden">
-                    <button id="open-menu" class="text-primary-500 p-2 rounded-full hover:bg-primary-100">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                </div>
-                
-                <div class="flex-1 flex justify-between items-center">
-                    <!-- Barra de búsqueda desktop -->
-                    <div class="desktop-search">
-                        <div class="relative w-full">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-primary-400"></i>
                             </div>
-                            <input id="desktop-search-input" class="block w-full pl-10 pr-3 py-2 border border-primary-200 rounded-lg bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm" placeholder="Buscar en inventario..." type="search" autocomplete="off">
-                            <button id="desktop-search-clear" class="absolute right-3 top-2 text-primary-400 hover:text-primary-600 hidden">
-                                <i class="fas fa-times"></i>
-                            </button>
                         </div>
-                    </div>
-                    
-                    <!-- Botón de búsqueda móvil - mejorado -->
-                    <div class="mobile-search-btn">
-                        <button id="open-search" class="text-primary-500 p-2 rounded-full hover:bg-primary-100">
-                            <i class="fas fa-search text-lg"></i>
-                        </button>
                     </div>
                 </div>
             </div>
             
-            <!-- Área de contenido principal -->
-            <div class="flex-1 overflow-auto p-6 bg-primary-50 main-content">
-                <div class="mb-6">
-                    <h1 class="text-2xl font-bold text-primary-900">Panel de Control</h1>
-                    <p class="text-primary-500">Bienvenido de nuevo, Juan. Esto es lo que está pasando con tu inventario hoy.</p>
-                </div>
-                
-                <!-- Tarjetas de estadísticas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-primary-500">Equipos Totales</p>
-                                <p class="mt-1 text-3xl font-semibold text-primary-900">1,248</p>
-                            </div>
-                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
-                                <i class="fas fa-laptop text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex items-center text-sm text-primary-500">
-                                <span class="text-green-500 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i> 12.5%
-                                </span>
-                                <span class="ml-2">vs mes pasado</span>
-                            </div>
-                        </div>
+            <!-- Contenido principal -->
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <!-- Navegación superior - ahora con posición sticky -->
+                <div class="top-navbar flex items-center justify-between h-16 px-4 sm:px-6">
+                    <div class="flex items-center md:hidden">
+                        <button id="open-menu" class="text-primary-500 dark:text-primary-400 p-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-800">
+                            <i class="fas fa-bars text-lg"></i>
+                        </button>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-primary-500">Dispositivos Móviles</p>
-                                <p class="mt-1 text-3xl font-semibold text-primary-900">487</p>
-                            </div>
-                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
-                                <i class="fas fa-mobile-alt text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex items-center text-sm text-primary-500">
-                                <span class="text-green-500 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i> 8.3%
-                                </span>
-                                <span class="ml-2">vs mes pasado</span>
+                    <div class="flex-1 flex justify-between items-center">
+                        <!-- Barra de búsqueda desktop -->
+                        <div class="desktop-search">
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search text-primary-400 dark:text-primary-500"></i>
+                                </div>
+                                <input id="desktop-search-input" class="block w-full pl-10 pr-3 py-2 border border-primary-200 dark:border-primary-700 rounded-lg bg-primary-50 dark:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm" placeholder="Buscar en inventario..." type="search" autocomplete="off">
+                                <button id="desktop-search-clear" class="absolute right-3 top-2 text-primary-400 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-300 hidden">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-primary-500">En Mantenimiento</p>
-                                <p class="mt-1 text-3xl font-semibold text-primary-900">32</p>
+                        
+                        <!-- Botones de acciones superiores (búsqueda móvil y tema) -->
+                        <div class="top-actions">
+                            <!-- Botón de cambio de tema -->
+                            <div class="theme-toggle" id="theme-toggle" title="Cambiar tema">
+                                <i class="fas fa-moon" id="theme-icon"></i>
                             </div>
-                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
-                                <i class="fas fa-tools text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex items-center text-sm text-primary-500">
-                                <span class="text-red-500 flex items-center">
-                                    <i class="fas fa-arrow-down mr-1"></i> 4.2%
-                                </span>
-                                <span class="ml-2">vs mes pasado</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-primary-500">Equipos Retirados</p>
-                                <p class="mt-1 text-3xl font-semibold text-primary-900">89</p>
-                            </div>
-                            <div class="p-3 rounded-lg bg-primary-100 text-primary-800">
-                                <i class="fas fa-trash-alt text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <div class="flex items-center text-sm text-primary-500">
-                                <span class="text-green-500 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i> 2.1%
-                                </span>
-                                <span class="ml-2">vs mes pasado</span>
+                            
+                            <!-- Botón de búsqueda móvil - mejorado -->
+                            <div class="mobile-search-btn">
+                                <button id="open-search" class="text-primary-500 dark:text-primary-400 p-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-800">
+                                    <i class="fas fa-search text-lg"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Actividad reciente y estado del inventario -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Actividad reciente -->
-                    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-lg font-semibold text-primary-900">Actividad Reciente</h2>
-                            <button class="text-sm font-medium text-primary-500 hover:text-primary-900">Ver Todo</button>
+                <!-- Área de contenido principal -->
+                <div class="flex-1 overflow-auto p-6 bg-primary-50 dark:bg-primary-900 main-content">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-primary-900 dark:text-white">Panel de Control</h1>
+                        <p class="text-primary-500 dark:text-primary-400">Bienvenido de nuevo, Juan. Esto es lo que está pasando con tu inventario hoy.</p>
+                    </div>
+                    
+                    <!-- Tarjetas de estadísticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-primary-500 dark:text-primary-400">Equipos Totales</p>
+                                    <p class="mt-1 text-3xl font-semibold text-primary-900 dark:text-white">1,248</p>
+                                </div>
+                                <div class="p-3 rounded-lg bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200">
+                                    <i class="fas fa-laptop text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex items-center text-sm text-primary-500 dark:text-primary-400">
+                                    <span class="text-green-500 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i> 12.5%
+                                    </span>
+                                    <span class="ml-2">vs mes pasado</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="space-y-6">
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-3">
-                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                        <i class="fas fa-laptop text-primary-600"></i>
-                                    </div>
+                        <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-primary-500 dark:text-primary-400">Dispositivos Móviles</p>
+                                    <p class="mt-1 text-3xl font-semibold text-primary-900 dark:text-white">487</p>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-primary-900">Nuevo MacBook Pro asignado</p>
-                                    <p class="text-sm text-primary-500">Asignado a María González (ID: #INV-2023-0142)</p>
-                                    <p class="text-xs text-primary-400 mt-1">Hace 2 horas</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <span class="status-badge status-assigned">Asignado</span>
+                                <div class="p-3 rounded-lg bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200">
+                                    <i class="fas fa-mobile-alt text-xl"></i>
                                 </div>
                             </div>
-                            
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-3">
-                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                        <i class="fas fa-mobile-alt text-primary-600"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-primary-900">Mantenimiento iPhone 14 Pro</p>
-                                    <p class="text-sm text-primary-500">Cambio de batería solicitado para dispositivo #MD-2023-0087</p>
-                                    <p class="text-xs text-primary-400 mt-1">Hace 5 horas</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <span class="status-badge status-maintenance">Mantenimiento</span>
+                            <div class="mt-4">
+                                <div class="flex items-center text-sm text-primary-500 dark:text-primary-400">
+                                    <span class="text-green-500 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i> 8.3%
+                                    </span>
+                                    <span class="ml-2">vs mes pasado</span>
                                 </div>
                             </div>
-                            
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-3">
-                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                        <i class="fas fa-laptop text-primary-600"></i>
-                                    </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-primary-500 dark:text-primary-400">En Mantenimiento</p>
+                                    <p class="mt-1 text-3xl font-semibold text-primary-900 dark:text-white">32</p>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-primary-900">Dell XPS 15 retirado</p>
-                                    <p class="text-sm text-primary-500">Dispositivo #INV-2020-0452 marcado como retirado</p>
-                                    <p class="text-xs text-primary-400 mt-1">Hace 1 día</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <span class="status-badge status-retired">Retirado</span>
+                                <div class="p-3 rounded-lg bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200">
+                                    <i class="fas fa-tools text-xl"></i>
                                 </div>
                             </div>
-                            
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-3">
-                                    <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                        <i class="fas fa-mobile-alt text-primary-600"></i>
-                                    </div>
+                            <div class="mt-4">
+                                <div class="flex items-center text-sm text-primary-500 dark:text-primary-400">
+                                    <span class="text-red-500 flex items-center">
+                                        <i class="fas fa-arrow-down mr-1"></i> 4.2%
+                                    </span>
+                                    <span class="ml-2">vs mes pasado</span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-primary-900">Nuevo Samsung Galaxy S23 añadido</p>
-                                    <p class="text-sm text-primary-500">Dispositivo #MD-2023-0098 añadido al inventario</p>
-                                    <p class="text-xs text-primary-400 mt-1">Hace 2 días</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-primary-500 dark:text-primary-400">Equipos Retirados</p>
+                                    <p class="mt-1 text-3xl font-semibold text-primary-900 dark:text-white">89</p>
                                 </div>
-                                <div class="ml-auto">
-                                    <span class="status-badge status-available">Disponible</span>
+                                <div class="p-3 rounded-lg bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200">
+                                    <i class="fas fa-trash-alt text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="flex items-center text-sm text-primary-500 dark:text-primary-400">
+                                    <span class="text-green-500 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i> 2.1%
+                                    </span>
+                                    <span class="ml-2">vs mes pasado</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Estado del inventario -->
-                    <div class="bg-white rounded-xl shadow-sm border border-primary-100 p-6 card-hover">
-                        <div class="mb-6">
-                            <h2 class="text-lg font-semibold text-primary-900">Estado del Inventario</h2>
-                        </div>
-                        
-                        <div class="space-y-5">
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-medium text-primary-700">Disponibles</span>
-                                    <span class="text-sm font-medium text-primary-900">42%</span>
-                                </div>
-                                <div class="w-full bg-primary-100 rounded-full h-2">
-                                    <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
-                                </div>
+                    <!-- Actividad reciente y estado del inventario -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <!-- Actividad reciente -->
+                        <div class="lg:col-span-2 bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-lg font-semibold text-primary-900 dark:text-white">Actividad Reciente</h2>
+                                <button class="text-sm font-medium text-primary-500 dark:text-primary-400 hover:text-primary-900 dark:hover:text-white">Ver Todo</button>
                             </div>
                             
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-medium text-primary-700">Asignados</span>
-                                    <span class="text-sm font-medium text-primary-900">51%</span>
-                                </div>
-                                <div class="w-full bg-primary-100 rounded-full h-2">
-                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 51%"></div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-medium text-primary-700">Mantenimiento</span>
-                                    <span class="text-sm font-medium text-primary-900">5%</span>
-                                </div>
-                                <div class="w-full bg-primary-100 rounded-full h-2">
-                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 5%"></div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-medium text-primary-700">Retirados</span>
-                                    <span class="text-sm font-medium text-primary-900">2%</span>
-                                </div>
-                                <div class="w-full bg-primary-100 rounded-full h-2">
-                                    <div class="bg-red-500 h-2 rounded-full" style="width: 2%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <button class="w-full flex items-center justify-center px-4 py-2 border border-primary-200 rounded-lg text-sm font-medium text-primary-700 bg-white hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                <i class="fas fa-plus mr-2"></i> Añadir Nuevo Dispositivo
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Equipos recientes -->
-                <div class="bg-white rounded-xl shadow-sm border border-primary-100 overflow-hidden card-hover">
-                    <div class="px-6 py-4 border-b border-primary-100">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-semibold text-primary-900">Equipos Recientes</h2>
-                            <button class="text-sm font-medium text-primary-500 hover:text-primary-900">Ver Todo</button>
-                        </div>
-                    </div>
-                    
-                    <div class="responsive-table">
-                        <table class="min-w-full divide-y divide-primary-200">
-                            <thead class="bg-primary-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">ID</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Dispositivo</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Modelo</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Asignado a</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Fecha Compra</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 uppercase tracking-wider">Estado</th>
-                                    <th scope="col" class="relative px-6 py-3">
-                                        <span class="sr-only">Acciones</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-primary-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2023-0142</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">MacBook Pro</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">16" M2 Max, 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">María González</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">15 Mar 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="space-y-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-700 flex items-center justify-center">
+                                            <i class="fas fa-laptop text-primary-600 dark:text-primary-300"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-primary-900 dark:text-white">Nuevo MacBook Pro asignado</p>
+                                        <p class="text-sm text-primary-500 dark:text-primary-400">Asignado a María González (ID: #INV-2023-0142)</p>
+                                        <p class="text-xs text-primary-400 dark:text-primary-500 mt-1">Hace 2 horas</p>
+                                    </div>
+                                    <div class="ml-auto">
                                         <span class="status-badge status-assigned">Asignado</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2022-0781</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Dell XPS 15</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">i7-11800H, 32GB</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Carlos Martínez</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">22 Ago 2022</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="status-badge status-assigned">Asignado</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2023-0095</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">Mac Mini</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">M2, 16GB, 512GB</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">-</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">10 Feb 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="status-badge status-available">Disponible</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900">#INV-2021-0324</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900">HP EliteBook</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">i5-1135G7, 16GB</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">-</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500">05 Nov 2021</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    </div>
+                                </div>
+                                
+                                <div class="flex">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-700 flex items-center justify-center">
+                                            <i class="fas fa-mobile-alt text-primary-600 dark:text-primary-300"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-primary-900 dark:text-white">Mantenimiento iPhone 14 Pro</p>
+                                        <p class="text-sm text-primary-500 dark:text-primary-400">Cambio de batería solicitado para dispositivo #MD-2023-0087</p>
+                                        <p class="text-xs text-primary-400 dark:text-primary-500 mt-1">Hace 5 horas</p>
+                                    </div>
+                                    <div class="ml-auto">
                                         <span class="status-badge status-maintenance">Mantenimiento</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button class="text-primary-600 hover:text-primary-900 mr-3"><i class="fas fa-edit"></i></button>
-                                        <button class="text-primary-600 hover:text-primary-900"><i class="fas fa-ellipsis-v"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-700 flex items-center justify-center">
+                                            <i class="fas fa-laptop text-primary-600 dark:text-primary-300"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-primary-900 dark:text-white">Dell XPS 15 retirado</p>
+                                        <p class="text-sm text-primary-500 dark:text-primary-400">Dispositivo #INV-2020-0452 marcado como retirado</p>
+                                        <p class="text-xs text-primary-400 dark:text-primary-500 mt-1">Hace 1 día</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="status-badge status-retired">Retirado</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-700 flex items-center justify-center">
+                                            <i class="fas fa-mobile-alt text-primary-600 dark:text-primary-300"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-primary-900 dark:text-white">Nuevo Samsung Galaxy S23 añadido</p>
+                                        <p class="text-sm text-primary-500 dark:text-primary-400">Dispositivo #MD-2023-0098 añadido al inventario</p>
+                                        <p class="text-xs text-primary-400 dark:text-primary-500 mt-1">Hace 2 días</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="status-badge status-available">Disponible</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Estado del inventario -->
+                        <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
+                            <div class="mb-6">
+                                <h2 class="text-lg font-semibold text-primary-900 dark:text-white">Estado del Inventario</h2>
+                            </div>
+                            
+                            <div class="space-y-5">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Disponibles</span>
+                                        <span class="text-sm font-medium text-primary-900 dark:text-white">42%</span>
+                                    </div>
+                                    <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Asignados</span>
+                                        <span class="text-sm font-medium text-primary-900 dark:text-white">51%</span>
+                                    </div>
+                                    <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full, style="width: 51%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Mantenimiento</span>
+                                        <span class="text-sm font-medium text-primary-900 dark:text-white">5%</span>
+                                    </div>
+                                    <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 5%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-primary-700 dark:text-primary-300">Retirados</span>
+                                        <span class="text-sm font-medium text-primary-900 dark:text-white">2%</span>
+                                    </div>
+                                    <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: 2%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <button class="w-full flex items-center justify-center px-4 py-2 border border-primary-200 dark:border-primary-700 rounded-lg text-sm font-medium text-primary-700 dark:text-primary-300 bg-white dark:bg-primary-900 hover:bg-primary-50 dark:hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                    <i class="fas fa-plus mr-2"></i> Añadir Nuevo Dispositivo
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="px-6 py-3 border-t border-primary-100 bg-primary-50">
-                        <div class="flex items-center justify-between">
-                            <div class="text-sm text-primary-500">
-                                Mostrando <span class="font-medium">1</span> a <span class="font-medium">4</span> de <span class="font-medium">1248</span> resultados
+                    <!-- Equipos recientes -->
+                    <div class="bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 overflow-hidden card-hover">
+                        <div class="px-6 py-4 border-b border-primary-100 dark:border-primary-700">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-primary-900 dark:text-white">Equipos Recientes</h2>
+                                <button class="text-sm font-medium text-primary-500 dark:text-primary-400 hover:text-primary-900 dark:hover:text-white">Ver Todo</button>
                             </div>
-                            <div class="flex space-x-2">
-                                <button class="px-3 py-1 border border-primary-200 rounded-md text-sm font-medium text-primary-700 bg-white hover:bg-primary-50">
-                                    Anterior
-                                </button>
-                                <button class="px-3 py-1 border border-primary-200 rounded-md text-sm font-medium text-primary-700 bg-white hover:bg-primary-50">
-                                    Siguiente
-                                </button>
+                        </div>
+                        
+                        <div class="responsive-table">
+                            <table class="min-w-full divide-y divide-primary-200 dark:divide-primary-700">
+                                <thead class="bg-primary-50 dark:bg-primary-700">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">ID</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Dispositivo</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Modelo</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Asignado a</th>
+                                        <th scope="col, class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Fecha Compra</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Estado</th>
+                                        <th scope="col" class="relative px-6 py-3">
+                                            <span class="sr-only">Acciones</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-primary-800 divide-y divide-primary-200 dark:divide-primary-700">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900 dark:text-white">#INV-2023-0142</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">MacBook Pro</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">16" M2 Max, 2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">María González</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">15 Mar 2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-assigned">Asignado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200"><i class="fas fa-ellipsis-v"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900 dark:text-white">#INV-2022-0781</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">Dell XPS 15</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">i7-11800H, 32GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">Carlos Martínez</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">22 Ago 2022</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-assigned">Asignado</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200"><i class="fas fa-ellipsis-v"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900 dark:text-white">#INV-2023-0095</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">Mac Mini</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">M2, 16GB, 512GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">10 Feb 2023</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-available">Disponible</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200"><i class="fas fa-ellipsis-v"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-900 dark:text-white">#INV-2021-0324</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">HP EliteBook</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">i5-1135G7, 16GB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">05 Nov 2021</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-maintenance">Mantenimiento</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200 mr-3"><i class="fas fa-edit"></i></button>
+                                            <button class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-200"><i class="fas fa-ellipsis-v"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="px-6 py-3 border-t border-primary-100 dark:border-primary-700 bg-primary-50 dark:bg-primary-700">
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-primary-500 dark:text-primary-300">
+                                    Mostrando <span class="font-medium">1</span> a <span class="font-medium">4</span> de <span class="font-medium">1248</span> resultados
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 border border-primary-200 dark:border-primary-600 rounded-md text-sm font-medium text-primary-700 dark:text-primary-300 bg-white dark:bg-primary-800 hover:bg-primary-50 dark:hover:bg-primary-600">
+                                        Anterior
+                                    </button>
+                                    <button class="px-3 py-1 border border-primary-200 dark:border-primary-600 rounded-md text-sm font-medium text-primary-700 dark:text-primary-300 bg-white dark:bg-primary-800 hover:bg-primary-50 dark:hover:bg-primary-600">
+                                        Siguiente
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -755,6 +876,14 @@
                     this.style.transform = '';
                     this.style.boxShadow = '';
                 });
+                
+                // Para dispositivos táctiles, eliminar el hover después de tocar
+                card.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.boxShadow = '';
+                    }, 300);
+                });
             });
             
             // Efectos click en items del sidebar
@@ -766,6 +895,13 @@
                     sidebarItems.forEach(i => i.classList.add('text-primary-200', 'hover:text-white'));
                     this.classList.remove('text-primary-200', 'hover:text-white');
                     this.classList.add('bg-primary-800', 'text-white');
+                });
+                
+                // Para dispositivos táctiles, eliminar el hover después de tocar
+                item.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 300);
                 });
             });
             
@@ -863,6 +999,54 @@
             mobileSearchContainer.addEventListener('click', function(e) {
                 e.stopPropagation();
             });
+            
+            // Funcionalidad del cambio de tema
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+            
+            // Verificar el tema guardado en localStorage o usar el preferido del sistema
+            const savedTheme = localStorage.getItem('theme') || 
+                              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            
+            // Aplicar el tema inicial
+            if (savedTheme === 'dark') {
+                htmlElement.classList.add('dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                htmlElement.classList.remove('dark');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+            
+            // Alternar tema al hacer clic en el botón
+            themeToggle.addEventListener('click', function() {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                } else {
+                    htmlElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                }
+            });
+            
+            // Para dispositivos táctiles, eliminar el hover después de tocar
+            themeToggle.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 300);
+            });
+            
+            // Detectar si el dispositivo es táctil
+            function isTouchDevice() {
+                return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+            }
+            
+            // Si es un dispositivo táctil, desactivar los hovers
+            if (isTouchDevice()) {
+                document.body.classList.add('touch-device');
+            }
         });
     </script>
 </body>
