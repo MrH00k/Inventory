@@ -1,9 +1,23 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>InventoryX | Panel</title>
+    
+    <!-- Script de tema antes de cualquier estilo -->
+    <script>
+        // Verificar el tema antes de que se cargue la página
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -521,7 +535,7 @@
                         <div class="top-actions">
                             <!-- Botón de cambio de tema -->
                             <div class="theme-toggle" id="theme-toggle" title="Cambiar tema">
-                                <i class="fas fa-moon" id="theme-icon"></i>
+                                <i class="fas" id="theme-icon"></i>
                             </div>
                             
                             <!-- Botón de búsqueda móvil - mejorado -->
@@ -630,7 +644,7 @@
                         <div class="lg:col-span-2 bg-white dark:bg-primary-800 rounded-xl shadow-sm border border-primary-100 dark:border-primary-700 p-6 card-hover">
                             <div class="flex items-center justify-between mb-6">
                                 <h2 class="text-lg font-semibold text-primary-900 dark:text-white">Actividad Reciente</h2>
-                                <button class="text-sm font-medium text-primary-500 dark:text-primary-400 hover:text-primary-900 dark:hover:text-white">Ver Todo</button>
+                <button class="text-sm font-medium text-primary-500 dark:text-primary-400 hover:text-primary-900 dark:hover:text-white">Ver Todo</button>
                             </div>
                             
                             <div class="space-y-6">
@@ -713,7 +727,7 @@
                                         <span class="text-sm font-medium text-primary-900 dark:text-white">42%</span>
                                     </div>
                                     <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
-                                        <div class="bg-green-500 h-2 rounded-full" style="width: 42%"></div>
+                                        <div class="bg-green-500 h-2 rounded-full, style="width: 42%"></div>
                                     </div>
                                 </div>
                                 
@@ -723,7 +737,7 @@
                                         <span class="text-sm font-medium text-primary-900 dark:text-white">51%</span>
                                     </div>
                                     <div class="w-full bg-primary-100 dark:bg-primary-700 rounded-full h-2">
-                                        <div class="bg-blue-500 h-2 rounded-full, style="width: 51%"></div>
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 51%"></div>
                                     </div>
                                 </div>
                                 
@@ -770,10 +784,10 @@
                                 <thead class="bg-primary-50 dark:bg-primary-700">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">ID</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Dispositivo</th>
+                                        <th scope="col, class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Dispositivo</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Modelo</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Asignado a</th>
-                                        <th scope="col, class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Fecha Compra</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Fecha Compra</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-primary-500 dark:text-primary-300 uppercase tracking-wider">Estado</th>
                                         <th scope="col" class="relative px-6 py-3">
                                             <span class="sr-only">Acciones</span>
@@ -800,7 +814,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">Dell XPS 15</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">i7-11800H, 32GB</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-900 dark:text-white">Carlos Martínez</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">22 Ago 2022</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-500 dark:text-primary-400">22 Aug 2022</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="status-badge status-assigned">Asignado</span>
                                         </td>
@@ -957,7 +971,8 @@
             mobileSearchInput.addEventListener('input', function() {
                 if (this.value.length > 0) {
                     searchClearBtn.classList.remove('hidden');
-                } else {
+                }
+                else {
                     searchClearBtn.classList.add('hidden');
                 }
             });
@@ -1005,29 +1020,33 @@
             const themeIcon = document.getElementById('theme-icon');
             const htmlElement = document.documentElement;
             
-            // Verificar el tema guardado en localStorage o usar el preferido del sistema
-            const savedTheme = localStorage.getItem('theme') || 
-                              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            
-            // Aplicar el tema inicial
-            if (savedTheme === 'dark') {
-                htmlElement.classList.add('dark');
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                htmlElement.classList.remove('dark');
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            // Función para actualizar el icono del tema
+            function updateThemeIcon(isDark) {
+                if (isDark) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
             }
+            
+            // Verificar el tema actual al cargar la página
+            const isDarkMode = htmlElement.classList.contains('dark');
+            updateThemeIcon(isDarkMode);
             
             // Alternar tema al hacer clic en el botón
             themeToggle.addEventListener('click', function() {
-                if (htmlElement.classList.contains('dark')) {
+                const isDark = htmlElement.classList.contains('dark');
+                
+                if (isDark) {
                     htmlElement.classList.remove('dark');
                     localStorage.setItem('theme', 'light');
-                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                    updateThemeIcon(false);
                 } else {
                     htmlElement.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
-                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                    updateThemeIcon(true);
                 }
             });
             
